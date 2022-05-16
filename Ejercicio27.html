@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-3">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Ejercicio 27</h1>
+    <script>
+    console.log("%cEjercicio 27", "font-weight:bold; font-size:12px")
+        
+        //27) Programa una clase llamada Pelicula.
+        // La clase recibirá un objeto al momento de instanciarse con los siguentes datos: id de la película en IMDB, titulo, director, 
+        // año de estreno, país o países de origen, géneros y calificación en IMBD.
+        //   - Todos los datos del objeto son obligatorios.
+        //   - Valida que el id IMDB tenga 9 caracteres, los primeros 2 sean letras y los 
+        //      7 restantes números.
+        //   - Valida que el título no rebase los 100 caracteres.
+        //   - Valida que el director no rebase los 50 caracteres.
+        //   - Valida que el año de estreno sea un número entero de 4 dígitos.
+        //   - Valida que el país o paises sea introducidos en forma de arreglo.
+        //   - Valida que los géneros sean introducidos en forma de arreglo.
+        //   - Valida que los géneros introducidos esten dentro de los géneros 
+        //      aceptados*.
+        //   - Crea un método estático que devuelva los géneros aceptados*.
+        //   - Valida que la calificación sea un número entre 0 y 10 pudiendo ser 
+        //     decimal de una posición.
+        //   - Crea un método que devuelva toda la ficha técnica de la película.
+        //   - Apartir de un arreglo con la información de 3 películas genera 3 
+        //     instancias de la clase de forma automatizada e imprime la ficha técnica 
+        //     de cada película.
+
+        // * Géneros Aceptados: Action, Adult, Adventure, Animation, Biography, Comedy, Crime, 
+        // Documentary ,Drama, Family, Fantasy, Film Noir, Game-Show, History, Horror, Musical,
+        // Music, Mystery, News, Reality-TV, Romance, Sci-Fi, Short, Sport, Talk-Show, Thriller, 
+        // War, Western.
+
+        class Pelicula {
+            constructor(id_pelicula, titulo, director, anio, pais, generos, calificacion){
+                this.id_pelicula = id_pelicula
+                this.titulo = titulo
+                this.director = director
+                this.anio = anio
+                this.pais = pais
+                this.generos = generos
+                this.calificacion = calificacion 
+
+                this.parametroInvalido = undefined 
+                
+                this.validar_id_pelicula(id_pelicula)
+                this.validar_titulo(titulo)
+                this.validar_director(director)
+                this.validar_anio(anio)
+                this.validar_pais(pais)
+                this.validar_genero(generos)
+                this.validar_calificacion(calificacion)
+
+                //Los generos validos son un metodo estatico
+            } 
+            
+            validar_id_pelicula(id_pelicula){
+                if(id_pelicula==undefined) {
+                this.parametroInvalido = `id_pelicula: ${id_pelicula}` 
+                console.error("No se ha ingresado ningun ID de pelicula")}
+                if(!(/[a-zA-Z]{1,2}[0-9]{1,7}/gi.test(id_pelicula))||id_pelicula.length!==9||typeof id_pelicula !== "string"){
+                this.parametroInvalido = `id_pelicula: ${id_pelicula}`
+                console.error("Porfavor introduce un ID de formato IMDB")}
+            }
+
+            validar_titulo(titulo=undefined){
+                if(titulo==undefined){
+                this.parametroInvalido = `Titulo: ${titulo}`;
+                console.error("No se ha ingresado ningun titulo para esta pelicula")}
+                if(titulo.length>100) {
+                this.parametroInvalido = `Titulo: ${titulo}`; 
+                console.error("El titulo no puede tener mas de 100 caracteres")}
+                if(typeof titulo !== "string") {
+                this.parametroInvalido = `Titulo: ${titulo}`
+                console.error("Ingresa un titulo en formato cadena de texto")}
+            }
+
+            validar_director(director=undefined){
+                if(director==undefined) {
+                this.parametroInvalido = `Director: ${director}`; 
+                console.error("No se ha ingresado el nombre de un director para esta pelicula")}
+                if(director.length>50) {
+                this.parametroInvalido = `Director: ${director}`; 
+                console.error("El director no puede tener mas de 50 caracteres")}
+                if(typeof director !== "string") {
+                this.parametroInvalido = `Director: ${director}`
+                console.error("Ingresa el nombre de un director en formato cadena de texto")}
+            }
+
+            validar_anio(anio){
+                if(!anio){
+                this.parametroInvalido = `Año: ${anio}` 
+                console.error("No se ha ingresado ningun año pelicula")}
+                let anioString = anio.toString()
+                if(anioString.length!==4||(Number.isInteger(anio))==false||typeof anio !== "number"){
+                this.parametroInvalido = `Año: ${anio}` 
+                console.error("Porfavor introduce un año valido (numero entero de 4 digitos)")}
+            }
+
+            validar_pais(pais=[]){
+            if(!pais||!Array.isArray(pais)){
+            this.parametroInvalido = `Pais: ${pais}`; 
+            console.error("Ingresa un pais o conjunto de paises en formato Arreglo")}
+            for(let i=0;i<pais.length;i++){
+                if(typeof pais[i] !== "string") {
+                this.parametroInvalido = `Pais: ${pais}`
+                return console.error("No se aceptan numeros en el parametro `PAIS/PAISES`")}}
+            }
+
+            validar_genero(generos) {
+                if(!generos||!Array.isArray(generos)){
+                this.parametroInvalido = `Genero/s: ${generos}`; 
+                console.error("Ingresa un genero o conjunto de generos en formato Arreglo")}
+                
+                let coincidencias = []
+                var generos_validos = ['Action', 'Adult', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime',
+                    'Documentary', 'Drama', 'Family', 'Fantasy', 'Film Noir', 'Game - Show', 'History', 'Horror', 'Musical',
+                    'Music', 'Mystery', 'News', 'Reality - TV', 'Romance', 'Sci-Fi', 'Short', 'Sport', 'Talk - Show', 'Thriller',
+                    'War', 'Western'];
+                
+                    for (let gen of generos){
+                        if (typeof gen!=="string"){
+                        this.parametroInvalido= `Generos: ${generos}`
+                        console.error(`El valor ${gen} no es un tipo de dato valido como genero`)}};
+                    
+                    
+                    for (let gen of generos){
+                        if(generos_validos.includes(gen)) coincidencias.push(gen)
+                        else {this.parametroInvalido= `Generos: ${generos}`
+                        console.error(`"${gen}" No es un genero valido`)}
+                        }
+                this.generos = coincidencias
+                }
+             
+            
+            validar_calificacion(calificacion){
+                if(calificacion==undefined){
+                this.parametroInvalido= `Calificacion: ${calificacion}`
+                console.error('No has ingresado ningun parametro en "Calificacion".')}
+                if (!(/^[0-9]([.][0-9])?$/.test(calificacion))||(typeof calificacion !== "number")){
+                this.parametroInvalido= `Calificacion: ${calificacion}`
+                console.error("Formato de calificacion erronea")}
+            }
+            
+            ficha_tecnica (id_pelicula, titulo, director, anio, pais, generos, calificacion, parametroInvalido){
+                if(this.parametroInvalido!==undefined){ return console.error(`Para realizar la ficha tecnica profavor corrija el parametro: ${this.parametroInvalido}`)}
+                
+                return console.info(`Titulo: ${this.titulo} \nID: ${this.id_pelicula}\nAño: ${this.anio}\nDirector: ${this.director}\nPais/Paises: ${this.pais}\nGeneros: ${this.generos}\nCalificacion: ${this.calificacion}`)
+            } 
+            
+            static generosAceptados(){
+                console.table(['Action', 'Adult', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime',
+                    'Documentary', 'Drama', 'Family', 'Fantasy', 'Film Noir', 'Game - Show', 'History', 'Horror', 'Musical',
+                    'Music', 'Mystery', 'News', 'Reality-TV', 'Romance', 'Sci-Fi', 'Short', 'Sport', 'Talk - Show', 'Thriller',
+                    'War', 'Western'])}
+            }
+
+        console.log("%cPeliculas de Prueba", "font-weight:bold; font-size:12px")
+
+        //Pelicula en formato arreglo
+        const avengers = new Pelicula('TT1234567', 'Avengers', 'Tony Stark', 2004, ['Estados Unidos'], ['Action', 'Family','Adventure'],8.5);
+        //Pelicula "simil objeto"
+        const titanic = new Pelicula(
+        id_pelicula= "tt0120338",
+        titulo= 'Titanic',
+        director= "James Cameron",
+        anio= 1997,
+        pais= ["Spain"],
+        generos= ["Drama", "Romance"],
+        calificacion= 7.8);
+        //Pelicula a partir de un objeto (es la forma que encontre)
+        const peterPan = 
+        {id_pelicula: "tt0046183",
+        titulo: "Peter Pan",
+        director: "Clyde Geronimi",
+        anio: 1953,
+        pais: ["USA", "London"],
+        generos: ["Animation", "Adventure", "Family"],
+        calificacion: 7.3}
+        
+        const peter_pan = new Pelicula(
+            peterPan.id_pelicula,
+            peterPan.titulo,
+            peterPan.director,
+            peterPan.anio,
+            peterPan.pais,
+            peterPan.generos,
+            peterPan.calificacion)
+
+        // Ejecucion de las fichas tecnicas    
+            avengers.ficha_tecnica()
+            titanic.ficha_tecnica()
+            peter_pan.ficha_tecnica()
+
+    console.log("%cTres instancias de la clase pelicula y su ficha tecnica:", "font-weight:bold; font-size:12px")
+
+        let tresPeliculas = [
+            ["tt1661199", "Cinderella", "Kenneth Branagh", 1995, ["España"], ["Drama", "Family", "Fantasy"], 9.9],
+            {id_pelicula: "tt0088763", titulo: "Back to the future", director: "Robert Zemeckis", anio: 1985, pais: ["USA"], generos: ["Adventure",'Sci-Fi', "Comedy"], calificacion: 8.5}, 
+            ["Kf3556459", "Chronicles", "Josh Trank", 2012, ["Irlanda"], ["Drama", "Sci-Fi", "Thriller"], 7.1]]
+
+        tresPeliculas.forEach((peli)=> {
+        if(peli instanceof Array) {        
+            let peliculaArreglo = new Pelicula(peli[0], peli[1], peli[2], peli[3], peli[4], peli[5], peli[6])
+            return peliculaArreglo.ficha_tecnica()}
+        if(peli instanceof Object){
+            let peliculaObjeto = new Pelicula (peli.id_pelicula, peli.titulo, peli.director, peli.anio, peli.pais, peli.generos, peli.calificacion)
+            return peliculaObjeto.ficha_tecnica()}
+        })
+    
+    console.log("%cEjecucion del metodo estatico que nos muestra los generos aceptados:", "font-weight:bold; font-size:12px")    
+        Pelicula.generosAceptados()
+
+    
+    </script>
+</body>
+</html> 
